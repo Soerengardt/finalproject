@@ -1,0 +1,53 @@
+/*  font-family: 'Bangers', cursive;
+    font-family: 'Shrikhand', cursive;
+    font-family: 'Ultra', serif; */
+
+body {
+    background-color: #280ABB; //blau
+    /* background-color: #080228; //blau dunkel
+    background-color: #FFCD00; //gelb
+    background-color: #3A2F00; //gelb dunkel
+    background-color: #FF0000; //rot
+    background-color: #3A0000; //rot dunkel
+    background-color: #00D300; //grün
+    background-color: #002F00; //grün dunkel */
+}
+
+h1 {
+    font-family: 'Bangers', cursive;
+    /* font-family: 'Shrikhand', cursive; */
+    /* font-family: 'Ultra', serif; */
+    color: #FF0000;
+    text-shadow: -3px 0px white, 0 3px white, 3px 0 white, 0 -3px white;
+    font-size: 100px;
+    letter-spacing: 10px;
+    /* word-spacing: 6px; */
+}
+
+img {
+    max-height: 200px;
+}
+
+button {
+  display: inline-block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  position: relative;
+  cursor: pointer;
+  top: 0;
+  padding: 0 6px;
+  border: 2px solid rgb(255,255,255);
+  font: normal normal bold 20px/50px Arial, Helvetica, sans-serif;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  text-transform: uppercase;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  background: #FFCD00;
+}
+
+button:hover {
+  color: #FFCD00;
+  background: #ffffff;
+}
