@@ -11,20 +11,65 @@ var db = spicedPg(
 module.exports.register = function register(first, last, email, password) {
     return db.query(
         `INSERT INTO users (first, last, email, password) VALUES ($1, $2, $3, $4) RETURNING id, first, last`,
-        [first || null, last || null, email || null, password || null]
+        [first || null, last || null, email , password]
     );
 };
 
-module.exports.defineRole = function defineRole(role) {
+module.exports.defineRole = function defineRole(role, userId) {
     return db.query(
-        `INSERT INTO roles (role) VALUES ($1) RETURNING id, role`,
-        [role || null]
+        `INSERT INTO roles (role, user_id) VALUES ($1, $2) RETURNING role, user_id`,
+        [role, userId]
     );
 };
-
 
 
 ////////////////////// REGISTER /////////////////////////
+////////////////////// LOGIN /////////////////////////
+
+module.exports.getUserByEmail = function getUserByEmail(email) {
+    console.log(email);
+    return db.query(
+        `
+        SELECT id, first, last, password
+        FROM users
+        WHERE email = $1`,
+        [email]
+    );
+};
+
+module.exports.getRoleByUserId = function getRoleByUserId(userId) {
+    return db.query(
+        `
+        SELECT role
+        FROM roles
+        WHERE user_Id = $1`,
+        [userId]
+    );
+};
+
+
+////////////////////// LOGIN /////////////////////////
+///////////////////// PROFILE /////////////////////////
+
+module.exports.createProfile = function createProfile(id, birthday, gender, city, date, rent) {
+    return db.query(
+        `
+        UPDATE users
+        SET birthday = $2, gender = $3, city = $4, date = $5, rent = $6
+        WHERE id = $1
+        RETURNING id, birthday, gender, city, date, rent`,
+        [id, birthday, gender, city, date, rent]
+    );
+};
+
+
+
+///////////////////// PROFILE /////////////////////////
+////////////////////// QUESTIONAIRE /////////////////////////
+
+
+
+////////////////////// QUESTIONAIRE /////////////////////////
 ////////////////////// PASSWORD /////////////////////////
 
 module.exports.hashPassword = function hashPassword(plainTextPassword) {
@@ -45,5 +90,23 @@ module.exports.hashPassword = function hashPassword(plainTextPassword) {
     });
 };
 
+module.exports.checkPassword = function checkPassword(
+    textEnteredInLoginForm,
+    hashedPasswordFromDatabase
+) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(
+            textEnteredInLoginForm,
+            hashedPasswordFromDatabase,
+            function(err, doesMatch) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(doesMatch);
+                }
+            }
+        );
+    });
+};
 
 ////////////////////// PASSWORD /////////////////////////

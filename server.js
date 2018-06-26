@@ -45,39 +45,119 @@ app.use(function(req, res, next){
 });
 
 
-////////////////////// MIDDLEWARE /////////////////////////
-////////////////////// ROUTES /////////////////////////
+////////////////////// MIDDLEWARE ///////////////////////////////
+////////////////////// AUTHENTIFICATION /////////////////////////
 
 app.post("/register", function(req, res) {
-    db.hashPassword(req.body.password).then(function(hashedPass) {
-        return Promise.all([
-            db.register(
+    db
+        .hashPassword(req.body.password)
+        .then(function(hashedPass) {
+            return db.register(
                 req.body.first,
                 req.body.last,
                 req.body.email,
                 hashedPass
-            ),
-            db.defineRole(req.body.role)
-        ]).then(function([data1, data2]) {
-            console.log("This is the data:", data1, data2);
+            );
+        })
+        .then(function(result) {
+            // console.log(result);
+            const userId = result.rows[0].id;
+            const role = req.body.role;
+            db.defineRole(role, userId).then(function() {
+                req.session.userId = userId;
+                req.session.role = role;
+                res.json({
+                    success: true
+                });
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
         });
-        // .then(function() {
-        //     res.json({
-        //         success: true
-        //     });
-        // })
-        // .catch(function(err) {
-        //     console.log(err);
-        //     res.json({
-        //         success: false
-        //     });
-        // });
+});
+
+app.post("/login", function(req, res) {
+    let userId;
+    let role;
+    // let first;
+    // let last;
+    // console.log("inside /login", req.body);
+    db.getUserByEmail(req.body.email).then(function(result) {
+        // console.log(result);
+        // first = result.rows[0].first;
+        // last = result.rows[0].last;
+        userId = result.rows[0].id;
+        return db
+            .checkPassword(req.body.password, result.rows[0].password)
+            .then(doesMatch => {
+                if (doesMatch) {
+                    db
+                        .getRoleByUserId(userId)
+                        .then(data => {
+                            req.session.userId = userId;
+                            req.session.role = data.rows[0].role;
+                            // req.session.first = first;
+                            // req.session.last = last;
+                            res.json({
+                                success: true
+                            });
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                            res.json({
+                                success: false
+                            });
+                        });
+                } else {
+                    throw new Error();
+                }
+            });
+    });
+});
+
+
+
+///////////////////// AUTHENTIFICATION /////////////////////////
+///////////////////// PROFILE /////////////////////////
+
+app.post("/profile", function(req, res){
+    db.createProfile(req.session.userId, req.body.bio).then(function(data){
+        res.json(data.rows[0]);
+    }).catch(function(err){
+        console.log(err);
     });
 });
 
 
 
 
+
+///////////////////// PROFILE /////////////////////////
+///////////////////// QUESTIONAIRE /////////////////////////
+
+app.get("/questions", function(req, res) {
+    db
+        .getQuestions(req.session.role)
+        .then(data => {
+            // console.log("results from db.getfriends", data);
+            res.json(data.rows);
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+});
+
+
+
+
+
+
+
+///////////////////// QUESTIONAIRE /////////////////////////
+////////////////////// ROUTES /////////////////////////
 
 app.get('/welcome', function(req, res) {
     if (req.session.userId) {

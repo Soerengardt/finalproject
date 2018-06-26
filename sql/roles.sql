@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS roles;
 
 CREATE TABLE roles(
     id SERIAL PRIMARY KEY,
-    role VARCHAR(200) NOT NULL
+    user_id INTEGER,
+    role VARCHAR(200)
 );
 
 SELECT * FROM roles;

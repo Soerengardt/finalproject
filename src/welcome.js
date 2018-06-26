@@ -9,26 +9,38 @@ export default class Welcome extends React.Component {
         this.state = {
             showLogin: false
         };
+        this.showModal = this.showModal.bind(this);
+    }
+    showModal() {
+        this.setState({
+            showLogin: true
+        });
     }
     render() {
         return (
             <div id="welcome">
                 <HashRouter>
                     <div>
-                        <Route exact path="/" render={() => {
-                            return (
-                                <div>
-                                    {this.state.showLogin && <Login />}
-                                    <h1>Super Roomie</h1>
-                                    <img src="/assets/Batminion.png"/>
-                                    <h3>Find the ultimate flatmate!</h3>
+                        <Route
+                            exact
+                            path="/"
+                            render={() => {
+                                return (
+                                    <div>
+                                        <h1>Super Roomie</h1>
+                                        <img src="/assets/Batminion1.png" />
+                                        <img src="/assets/Ironminion1.png" />
+                                        <img src="/assets/Superminion1.png" />
+                                        <img src="/assets/Wolverminion1.png" />
+                                        <h3>Find the ultimate flatmate!</h3>
 
-                                    <p onClick={this.showLogin}>Login</p>
+                                        <p onClick={this.showModal}>Login</p>
+                                        {this.state.showLogin && <Login />}
 
-                                    <Link to="/register">Register</Link>
-                                </div>
-                            );
-                        }}
+                                        <Link to="/register">Register</Link>
+                                    </div>
+                                );
+                            }}
                         />
                         <Route exact path="/register" component={Register} />
                     </div>
@@ -36,5 +48,4 @@ export default class Welcome extends React.Component {
             </div>
         );
     }
-
 }

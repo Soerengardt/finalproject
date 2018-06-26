@@ -2,10 +2,19 @@
     font-family: 'Shrikhand', cursive;
     font-family: 'Ultra', serif; */
 
+* {
+    box-sizing: border-box;
+}
+
+header {
+    position: absolute;
+
+}
+
 body {
-    background-color: #280ABB; //blau
-    /* background-color: #080228; //blau dunkel
-    background-color: #FFCD00; //gelb
+    /* background-color: #280ABB; //blau */
+    background-color: #080228; //blau dunkel
+    /* background-color: #FFCD00; //gelb
     background-color: #3A2F00; //gelb dunkel
     background-color: #FF0000; //rot
     background-color: #3A0000; //rot dunkel
@@ -13,12 +22,16 @@ body {
     background-color: #002F00; //grün dunkel */
 }
 
+footer {
+
+}
+
 h1 {
     font-family: 'Bangers', cursive;
     /* font-family: 'Shrikhand', cursive; */
     /* font-family: 'Ultra', serif; */
-    color: #FF0000;
-    text-shadow: -3px 0px white, 0 3px white, 3px 0 white, 0 -3px white;
+    color: white;
+    text-shadow: -6px 0px #FF0000, 0 6px #FF0000, 6px 0 #FF0000, 0 -6px #FF0000;
     font-size: 100px;
     letter-spacing: 10px;
     /* word-spacing: 6px; */
@@ -50,4 +63,27 @@ button {
 button:hover {
   color: #FFCD00;
   background: #ffffff;
+}
+
+#login-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: calc(100% - 100px);
+    background: orange;
+    border: 1px black solid;
+    border-radius: 3%;
+    padding: 10em;
+    padding-bottom: 10em;
+    /* font-style: Arial; */
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background-color: rgb(153, 0, 153, 0.2);
 }

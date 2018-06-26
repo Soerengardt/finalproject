@@ -22,25 +22,25 @@ export default class Register extends React.Component {
                 password,
                 role
             })
-            // .then(resp => {
-            //     if (resp.data.success) {
-            //         location.replace("/");
-            //     } else {
-            //         this.setState(
-            //             {
-            //                 error: true
-            //             },
-            //             () => {
-            //                 console.log(this.state);
-            //             }
-            //         );
-            //     }
-            // });
+            .then(resp => {
+                if (resp.data.success) {
+                    location.replace("/profile");
+                } else {
+                    this.setState(
+                        {
+                            error: true
+                        },
+                        () => {
+                            console.log(this.state);
+                        }
+                    );
+                }
+            });
     }
     render() {
         return (
             <div id="register">
-                <h3>Hi Fella, please tell us more about yourself!</h3>
+                <h3>Hi Fella, please tell us your name and register to continue!</h3>
                 {this.state.error && <div className="err">Oops! You suck!</div>}
                 <input placeholder="First" type="text" name="first" onChange={this.handleInput} />
                 <input placeholder="last" type="text" name="last" onChange={this.handleInput} />
@@ -49,7 +49,7 @@ export default class Register extends React.Component {
 
                 <h3>I am looking for a</h3>
                 <input type="radio" name="role" value="landlord" onChange={this.handleInput} />flatmate
-                <input type="radio" name="role" value="roommate" onChange={this.handleInput} />flat
+                <input type="radio" name="role" value="tenant" onChange={this.handleInput} />flat
                 <button onClick={() => this.handleSubmit()}>Submit</button>
             </div>
         );
