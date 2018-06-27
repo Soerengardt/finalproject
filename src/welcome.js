@@ -18,7 +18,7 @@ export default class Welcome extends React.Component {
     }
     render() {
         return (
-            <div id="welcome">
+            <div>
                 <HashRouter>
                     <div>
                         <Route
@@ -34,7 +34,7 @@ export default class Welcome extends React.Component {
                                         <img src="/assets/Wolverminion1.png" />
                                         <h3>Find the ultimate flatmate!</h3>
 
-                                        <p onClick={this.showModal}>Login</p>
+                                        <button onClick={this.showModal}>Login</button>
                                         {this.state.showLogin && <Login />}
 
                                         <Link to="/register">Register</Link>

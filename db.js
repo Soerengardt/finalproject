@@ -51,25 +51,54 @@ module.exports.getRoleByUserId = function getRoleByUserId(userId) {
 ////////////////////// LOGIN /////////////////////////
 ///////////////////// PROFILE /////////////////////////
 
-module.exports.createProfile = function createProfile(id, birthday, gender, city, date, rent) {
+module.exports.createProfile = function createProfile(userId, birthday, gender, city, date, rent) {
     return db.query(
         `
         UPDATE users
         SET birthday = $2, gender = $3, city = $4, date = $5, rent = $6
         WHERE id = $1
         RETURNING id, birthday, gender, city, date, rent`,
-        [id, birthday, gender, city, date, rent]
+        [userId, birthday, gender, city, date, rent]
     );
 };
 
 
 
 ///////////////////// PROFILE /////////////////////////
-////////////////////// QUESTIONAIRE /////////////////////////
+////////////////////// QUESTIONNAIRE /////////////////////////
 
+module.exports.getQuestions = function getQuestions(role) {
+    return db.query(
+        `
+        SELECT *
+        FROM questions
+        WHERE role = $1`,
+        [role]
+    );
+};
 
+module.exports.writeAnswer = function writeAnswer(userId, questId, answer) {
+    return db.query(
+        `
+        INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3) RETURNING *
+        `,
+        [userId, questId, answer]
+    );
+};
 
-////////////////////// QUESTIONAIRE /////////////////////////
+////////////////////// QUESTIONNAIRE /////////////////////////
+////////////////////// MATCHING /////////////////////////
+
+// module.exports.getMatches = function getMatches(userId, questId, answer) {
+//     return db.query(
+//         `
+//         INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3) RETURNING *
+//         `,
+//         [userId, questId, answer]
+//     );
+// };
+
+////////////////////// MATCHING /////////////////////////
 ////////////////////// PASSWORD /////////////////////////
 
 module.exports.hashPassword = function hashPassword(plainTextPassword) {

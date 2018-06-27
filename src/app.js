@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import axios from './axios';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Profile from './profile';
+import { Logo, Logout } from './header';
+import Questionnaire from './questionnaire';
+import Home from './home';
+import Matches from './matches';
 
 class App extends Component {
     constructor(props) {
@@ -9,14 +13,15 @@ class App extends Component {
         this.state = {};
     }
     componentDidMount() {
-        axios.get('/user').then(({data}) => {
-            this.setState({
-                first: data.first,
-                last: data.last,
-                profilePic: data.image_url || "/assets/default.png",
-                id: data.id,
-            });
-        });
+        return;
+        // axios.get('/user').then(({data}) => {
+        //     this.setState({
+        //         first: data.first,
+        //         last: data.last,
+        //         profilePic: data.image_url || "/assets/default.png",
+        //         id: data.id,
+        //     });
+        // });
     }
 
     // showUploader() {
@@ -49,14 +54,15 @@ class App extends Component {
         //     return null;
         // }
         return (
-            <div className="app">
-                <header><img src="/assets/Logo.png" /></header>
+            <div>
                 <BrowserRouter>
                     <div>
                         <Route path="/profile" component={Profile} />
+                        <Route path="/questionnaire" component={Questionnaire} />
+                        <Route path="/home" component={Home} />
+                        <Route path="/matches" component={Matches} />
                     </div>
                 </BrowserRouter>
-                <footer>Footer</footer>
             </div>
         );
     }

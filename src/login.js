@@ -43,6 +43,7 @@ class Login extends Component {
         return (
             <div className="modal-wrapper">
                 <div id="login-modal">
+                    <h2>Yo, good to have you back!</h2>
                     <form onSubmit={this.onSubmit}>
                         <input type="text" name="email" onChange={this.onChange} />
                         <input type="password" name="password" onChange={this.onChange} />

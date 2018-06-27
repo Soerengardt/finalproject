@@ -39,7 +39,7 @@ export default class Register extends React.Component {
     }
     render() {
         return (
-            <div id="register">
+            <div className="welcome" id="register">
                 <h3>Hi Fella, please tell us your name and register to continue!</h3>
                 {this.state.error && <div className="err">Oops! You suck!</div>}
                 <input placeholder="First" type="text" name="first" onChange={this.handleInput} />

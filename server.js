@@ -81,7 +81,6 @@ app.post("/register", function(req, res) {
 
 app.post("/login", function(req, res) {
     let userId;
-    let role;
     // let first;
     // let last;
     // console.log("inside /login", req.body);
@@ -119,44 +118,101 @@ app.post("/login", function(req, res) {
 });
 
 
-
 ///////////////////// AUTHENTIFICATION /////////////////////////
+///////////////////// LOGOUT /////////////////////////
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/welcome");
+});
+
+///////////////////// LOGOUT /////////////////////////
 ///////////////////// PROFILE /////////////////////////
 
-app.post("/profile", function(req, res){
-    db.createProfile(req.session.userId, req.body.bio).then(function(data){
-        res.json(data.rows[0]);
-    }).catch(function(err){
-        console.log(err);
-    });
+app.post("/profile", function(req, res) {
+    db
+        .createProfile(
+            req.session.userId,
+            req.body.bday,
+            req.body.gender,
+            req.body.city,
+            req.body.date,
+            req.body.rent
+        )
+        .then(function() {
+            // console.log(data);
+            res.json({
+                success: true
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
+        });
 });
 
 
-
-
-
 ///////////////////// PROFILE /////////////////////////
-///////////////////// QUESTIONAIRE /////////////////////////
+///////////////////// QUESTIONNAIRE /////////////////////////
 
 app.get("/questions", function(req, res) {
     db
         .getQuestions(req.session.role)
         .then(data => {
-            // console.log("results from db.getfriends", data);
-            res.json(data.rows);
+            console.log("getQuestions", data);
+            res.json({
+                questions: data.rows
+            });
         })
         .catch(function(err) {
             console.log(err);
         });
 });
 
+app.post("/questions", function(req, res) {
+    db
+        .writeAnswer(
+            req.session.userId,
+            req.body.questId,
+            req.body.answ
+        )
+        .then(function() {
+            // console.log(data);
+            res.json({
+                success: true
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
+        });
+});
+
+
+///////////////////// QUESTIONNAIRE /////////////////////////
+///////////////////// MATCHING /////////////////////////
+
+// app.get("/matches", function(req, res) {
+//     db
+//         .getMatches(req.session.role)
+//         .then(data => {
+//             console.log("getQuestions", data);
+//             res.json({
+//                 questions: data.rows
+//             });
+//         })
+//         .catch(function(err) {
+//             console.log(err);
+//         });
+// });
 
 
 
-
-
-
-///////////////////// QUESTIONAIRE /////////////////////////
+///////////////////// MATCHING /////////////////////////
 ////////////////////// ROUTES /////////////////////////
 
 app.get('/welcome', function(req, res) {
