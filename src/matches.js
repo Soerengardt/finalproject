@@ -10,10 +10,11 @@ export default class Matches extends React.Component {
         this.state = {};
     }
     componentDidMount() {
-        axios.get('/matches').then(({data}) => {
-            this.setState({
-
-            });
+        axios.get('/matches').then((data) => {
+            console.log(data);
+            // this.setState({
+            //
+            // });
         });
     }
     render() {

@@ -1,13 +1,35 @@
 import React, { Component } from 'react';
 import axios from './axios';
-import { Logo, Logout } from './header';
+import { Logo, ProfilePic } from './header';
+import Uploader from './uploader';
 
 export default class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.showUploader = this.showUploader.bind(this);
+        this.closeUploader = this.closeUploader.bind(this);
+        this.setImage = this.setImage.bind(this);
         this.handleInput = this.handleInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    showUploader() {
+        this.setState({
+            uploaderIsVisible: true
+        });
+    }
+
+    closeUploader() {
+        this.setState({
+            uploaderIsVisible: false
+        });
+    }
+
+    setImage(imgUrl) {
+        this.setState({
+            profilePic: imgUrl,
+            uploaderIsVisible: false
+        });
     }
     handleInput(e) {
         this[e.target.name] = e.target.value;
@@ -53,6 +75,18 @@ export default class Profile extends Component {
                         Ok Fella, now please give us some basic information
                         about you!
                     </h3>
+                    <ProfilePic
+                        imageUrl={this.state.profilePic}
+                        toggleToUploader={this.showUploader}
+                        id={this.state.id}
+                        first={this.state.first}
+                        last={this.state.last}
+                        profilePic={this.state.image_url}
+                        showUploader={this.showUploader}
+                    />
+                    {this.state.uploaderIsVisible && (
+                        <Uploader setImage={this.setImage} closeModal={this.closeUploader} />
+                    )}
                     Date of birth<input
                         type="date"
                         name="bday"

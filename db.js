@@ -89,14 +89,25 @@ module.exports.writeAnswer = function writeAnswer(userId, questId, answer) {
 ////////////////////// QUESTIONNAIRE /////////////////////////
 ////////////////////// MATCHING /////////////////////////
 
-// module.exports.getMatches = function getMatches(userId, questId, answer) {
-//     return db.query(
-//         `
-//         INSERT INTO answers (user_id, question_id, answer) VALUES ($1, $2, $3) RETURNING *
-//         `,
-//         [userId, questId, answer]
-//     );
-// };
+module.exports.getAnswers = function getAnswers() {
+    return db.query(
+        `
+        SELECT *
+        FROM answers
+        `
+    );
+};
+
+module.exports.getAnswersByUserId = function getAnswersByUserId(userId) {
+    return db.query(
+        `
+        SELECT *
+        FROM answers
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
+};
 
 ////////////////////// MATCHING /////////////////////////
 ////////////////////// PASSWORD /////////////////////////

@@ -7,6 +7,14 @@ export function Logo() {
     );
 }
 
+export function ProfilePic(props) {
+    return (
+        <div>
+            <h3>Here you can upload an image of yourself!</h3>
+            <img src={props.imageUrl} onClick={props.toggleToUploader} />
+        </div>
+    );
+}
 
 export function MatchesNav() {
     return (

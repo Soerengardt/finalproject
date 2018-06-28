@@ -3,8 +3,8 @@ import axios from './axios';
 import { Link } from "react-router-dom";
 
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             email: "",
             password: ""
@@ -18,10 +18,11 @@ class Login extends Component {
         this.setState(
             {
                 [e.target.name]: e.target.value
-            },
-            () => {
-                console.log(this.state);
             }
+            // ,
+            // () => {
+            //     console.log(this.state);
+            // }
         );
     }
 
@@ -30,7 +31,7 @@ class Login extends Component {
 
         axios.post("/login", this.state).then(resp => {
             if (resp.data.success) {
-                location.replace("/");
+                location.replace("/home");
             } else {
                 this.setState({
                     error: true
@@ -43,15 +44,14 @@ class Login extends Component {
         return (
             <div className="modal-wrapper">
                 <div id="login-modal">
-                    <h2>Yo, good to have you back!</h2>
+                    <p>Yo, good to have you back!</p>
                     <form onSubmit={this.onSubmit}>
                         <input type="text" name="email" onChange={this.onChange} />
                         <input type="password" name="password" onChange={this.onChange} />
                         <button>Login!</button>
+                        <button onClick={this.props.closeModal}>Back</button>
                     </form>
-                    <h4>
-                        <Link to="/">Back</Link>
-                    </h4>
+
                 </div>
             </div>
         );

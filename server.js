@@ -158,6 +158,7 @@ app.post("/profile", function(req, res) {
 ///////////////////// QUESTIONNAIRE /////////////////////////
 
 app.get("/questions", function(req, res) {
+    console.log(req.session.role);
     db
         .getQuestions(req.session.role)
         .then(data => {
@@ -196,19 +197,97 @@ app.post("/questions", function(req, res) {
 ///////////////////// QUESTIONNAIRE /////////////////////////
 ///////////////////// MATCHING /////////////////////////
 
-// app.get("/matches", function(req, res) {
-//     db
-//         .getMatches(req.session.role)
-//         .then(data => {
-//             console.log("getQuestions", data);
-//             res.json({
-//                 questions: data.rows
-//             });
-//         })
-//         .catch(function(err) {
-//             console.log(err);
-//         });
-// });
+app.get("/matches", function(req, res) {
+    db
+        .getAnswers()
+        .then(data => {
+            // console.log(req.session.role);
+            let othersQuestionsArr = [];
+            if (req.session.role == "tenant") {
+                othersQuestionsArr = [4, 5, 6];
+            } else {
+                othersQuestionsArr = [1, 2, 3];
+            }
+
+            let othersAnswersArr = data.rows.filter(elem => {
+                return (
+                    elem.question_id == othersQuestionsArr[0] ||
+                    elem.question_id == othersQuestionsArr[1] ||
+                    elem.question_id == othersQuestionsArr[2]
+                );
+            });
+            // console.log("These are the others answers", othersAnswersArr);
+
+            db.getAnswersByUserId(req.session.userId).then(function(data) {
+                // console.log("These are my answers", data.rows.length);
+                data.rows.forEach(function(answer) {
+                    // console.log("This is the answer", answer);
+                    // console.log("This is the sata.othersAnswersArr", othersAnswersArr);
+                    let relevantAnswer;
+
+                    if (answer.question_id == 1) {
+                        relevantAnswer = othersAnswersArr.filter(
+                            answer => answer.question_id == 4
+                        );
+                    }
+                    if (answer.question_id == 2) {
+                        relevantAnswer = othersAnswersArr.filter(
+                            answer => answer.question_id == 5
+                        );
+                    }
+                    if (answer.question_id == 3) {
+                        relevantAnswer = othersAnswersArr.filter(
+                            answer => answer.question_id == 6
+                        );
+                    }
+                    if (answer.question_id == 4) {
+                        relevantAnswer = othersAnswersArr.filter(
+                            answer => answer.question_id == 1
+                        );
+                    }
+                    if (answer.question_id == 5) {
+                        relevantAnswer = othersAnswersArr.filter(
+                            answer => answer.question_id == 2
+                        );
+                    }
+                    if (answer.question_id == 6) {
+                        relevantAnswer = othersAnswersArr.filter(
+                            answer => answer.question_id == 3
+                        );
+                    }
+                    // console.log("Relevant answer", answer);
+                    relevantAnswer.forEach(item => {
+                        // console.log("Item.answer", item.answer);
+                        // console.log("data.rows[i].answer", data.rows[i].answer);
+                        item.diff = Math.abs(item.answer - answer.answer);
+                    });
+                    // console.log(relevantAnswer);
+                    relevantAnswer.sort(function(a, b) {
+                        return a.diff - b.diff;
+                    });
+                    console.log(relevantAnswer);
+                    // var obj = {};
+                    //
+                    // relevantAnswer.forEach(function(a) {
+                    //     obj[a.id] = a.diff;
+                    // });
+                    // relevantAnswer2.forEach(function(a) {
+                    //     obj[a.id] += a.diff;
+                    // });
+                    // relevantAnswer3.forEach(function(a) {
+                    //     obj[a.id] += a.diff;
+                    // });
+
+                });
+                // res.json({
+                //     :
+                // });
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+});
 
 
 

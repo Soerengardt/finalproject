@@ -10,7 +10,9 @@
 body {
     /* display: flex; */
     /* background-color: #280ABB; //blau */
+    font-family: 'Muli', sans-serif;
     background-color: #080228; //blau dunkel
+    color: white;
     /* background-color: #FFCD00; //gelb
     background-color: #3A2F00; //gelb dunkel
     background-color: #FF0000; //rot
@@ -27,12 +29,13 @@ header {
     width: 100%;
 }
 
-footer {
-    position: relative;
-    flex-direction: row;
-    background-color: #00D300;
-    /* border-top: 10px solid white; */
-}
+/* footer {
+    height: 50px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 9;
+} */
 
 h1 {
     font-family: 'Bangers', cursive;
@@ -43,6 +46,14 @@ h1 {
     font-size: 100px;
     letter-spacing: 10px;
     /* word-spacing: 6px; */
+}
+
+h2 {
+    font-size: 70px;
+}
+
+h3 {
+    font-size: 50px;
 }
 
 img {
@@ -69,8 +80,8 @@ button {
 }
 
 button:hover {
-  color: #FFCD00;
-  background: #ffffff;
+    color: #FFCD00;
+    background: #ffffff;
 }
 
 a {
@@ -94,17 +105,31 @@ a {
 }
 
 a:hover {
-  color: #FFCD00;
-  background: #ffffff;
+    color: #FFCD00;
+    background: #ffffff;
 }
 
 input {
+    font-family: 'Muli', sans-serif;
     border: 2px solid red;
     background-color: white;
-    width: 100%;
+    width: 50%;
+}
+
+form {
+
+}
+
+#minions {
+    display: flex;
+    justify-content: center;
 }
 
 #login-modal {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -113,9 +138,15 @@ input {
     background: white;
     border: 6px #FF0000 solid;
     border-radius: 3%;
-    padding: 10em;
-    padding-bottom: 10em;
+    padding: 5em;
+    padding-bottom: 5em;
     /* font-style: Arial; */
+}
+
+#login-modal p {
+    font-weight: bold;
+    font-size: 20px;
+    color: #080228;
 }
 
 .modal-wrapper {
@@ -134,7 +165,20 @@ input {
     color: white;
 }
 
-.test {
-    position: fixed;
-    border: 10px dotted white;
+
+.welcome {
+    display: flex;
+    /* margin-bottom: 50px; */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
 }
