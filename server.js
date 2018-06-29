@@ -1,13 +1,37 @@
 const express = require('express');
 const app = express();
+const config = require('./config');
 const compression = require('compression');
 const cookieSession = require('cookie-session');
 const csurf = require('csurf');
 const bodyParser = require('body-parser');
 const db = require('./db.js');
+const multer = require('multer');
+const uidSafe = require('uid-safe');
+const path = require('path');
+const s3 = require('./s3');
+
 
 
 ////////////////////// MIDDLEWARE /////////////////////////
+
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + '/uploads');
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
 
 if (process.env.NODE_ENV != 'production') {
     app.use(
@@ -153,6 +177,17 @@ app.post("/profile", function(req, res) {
         });
 });
 
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
+    return db
+        .uploadPhoto(req.session.userId, config.s3Url + req.file.filename)
+        .then(function(result) {
+            // console.log("This is RESULT", result);
+            res.json(result.rows[0].photo);
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+});
 
 ///////////////////// PROFILE /////////////////////////
 ///////////////////// QUESTIONNAIRE /////////////////////////
@@ -197,7 +232,7 @@ app.post("/questions", function(req, res) {
 ///////////////////// QUESTIONNAIRE /////////////////////////
 ///////////////////// MATCHING /////////////////////////
 
-app.get("/matches", function(req, res) {
+app.get("/getmatches", function(req, res) {
     db
         .getAnswers()
         .then(data => {
@@ -219,6 +254,9 @@ app.get("/matches", function(req, res) {
             // console.log("These are the others answers", othersAnswersArr);
 
             db.getAnswersByUserId(req.session.userId).then(function(data) {
+                const newArray = [];
+                const newArray1 = [];
+
                 // console.log("These are my answers", data.rows.length);
                 data.rows.forEach(function(answer) {
                     // console.log("This is the answer", answer);
@@ -255,33 +293,69 @@ app.get("/matches", function(req, res) {
                             answer => answer.question_id == 3
                         );
                     }
-                    // console.log("Relevant answer", answer);
+                    // console.log("Relevant answer", relevantAnswer);
                     relevantAnswer.forEach(item => {
                         // console.log("Item.answer", item.answer);
                         // console.log("data.rows[i].answer", data.rows[i].answer);
                         item.diff = Math.abs(item.answer - answer.answer);
                     });
-                    // console.log(relevantAnswer);
+                    // console.log('These are the relevant answers', relevantAnswer);
                     relevantAnswer.sort(function(a, b) {
                         return a.diff - b.diff;
                     });
-                    console.log(relevantAnswer);
-                    // var obj = {};
-                    //
-                    // relevantAnswer.forEach(function(a) {
-                    //     obj[a.id] = a.diff;
-                    // });
-                    // relevantAnswer2.forEach(function(a) {
-                    //     obj[a.id] += a.diff;
-                    // });
-                    // relevantAnswer3.forEach(function(a) {
-                    //     obj[a.id] += a.diff;
-                    // });
+                    // console.log('These are the relevant Answer', relevantAnswer);
+
+                    newArray.push(db.getUsersByIds(relevantAnswer.map(u => u.user_id), relevantAnswer));
+                    newArray1.push(relevantAnswer);
 
                 });
-                // res.json({
-                //     :
-                // });
+                // console.log('This is the newArray', newArray);
+
+                Promise.all(newArray).then(function([set1, set2, set3]) {
+                    set1 = set1.rows;
+                    set2 = set2.rows;
+                    set3 = set3.rows;
+
+                    set1.sort(function(a, b) {
+                        var x = newArray1[0].findIndex(function(item) {
+                            return item.user_id == a.id;
+                        });
+
+                        var y = newArray1[0].findIndex(function(item) {
+                            return item.user_id == b.id;
+                        });
+                        return x - y;
+                    });
+
+                    set2.sort(function(a, b) {
+                        var x = newArray1[1].findIndex(function(item) {
+                            return item.user_id == a.id;
+                        });
+
+                        var y = newArray1[1].findIndex(function(item) {
+                            return item.user_id == b.id;
+                        });
+                        return x - y;
+                    });
+
+                    set3.sort(function(a, b) {
+                        var x = newArray1[2].findIndex(function(item) {
+                            return item.user_id == a.id;
+                        });
+
+                        var y = newArray1[2].findIndex(function(item) {
+                            return item.user_id == b.id;
+                        });
+                        return x - y;
+                    });
+                    // console.log('newArray1', newArray1[1]);
+                    // console.log('3 SETS', set2);
+                    res.json({
+                        firstQuestionMatches: set1,
+                        secondQuestionMatches: set2,
+                        thirdQuestionMatches: set3
+                    });
+                });
             });
         })
         .catch(function(err) {

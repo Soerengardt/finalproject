@@ -69,18 +69,17 @@ export default class Questionnaire extends React.Component {
                     <Logo />
                 </header>
                 <div className="body">
-                    {this.state.questions[this.state.current].question}
+                    <h3>{this.state.questions[this.state.current].question}</h3>
                     <input
                         type="range"
                         name="answ"
-                        min="0"
+                        min="1"
                         max="5"
                         step="1"
                         onChange={this.handleInput}
                     />
                     <button onClick={() => this.handleSubmit()}>Submit</button>
                 </div>
-                <footer>Footer</footer>
             </div>
         );
     }

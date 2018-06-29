@@ -66,11 +66,11 @@ export default class Profile extends Component {
     }
     render() {
         return (
-            <div className="profile">
+            <div className="app">
                 <header>
                     <Logo />
                 </header>
-                <div className="body">
+                <div className="app">
                     <h3>
                         Ok Fella, now please give us some basic information
                         about you!
@@ -126,7 +126,6 @@ export default class Profile extends Component {
                     />
                     <button onClick={() => this.handleSubmit()}>Submit</button>
                 </div>
-                <footer>Footer</footer>
             </div>
         );
     }

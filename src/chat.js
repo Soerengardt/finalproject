@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from './axios';
-import { Logo, Logout, MatchesNav, ChatNav } from './header';
+import { Logo, Logout, MatchesNav, HomeNav, ChatNav } from './header';
 
 
 export default class Home extends React.Component {
@@ -25,12 +25,13 @@ export default class Home extends React.Component {
             <div className="home">
                 <header>
                     <Logo />
+                    <HomeNav />
                     <MatchesNav />
                     <ChatNav />
                     <Logout />
                 </header>
                 <div className="body">
-                    <h2>Home with all your personal information</h2>
+                    <h2>Chats are coming here..</h2>
                 </div>
             </div>
         );

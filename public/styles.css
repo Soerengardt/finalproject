@@ -29,6 +29,11 @@ header {
     width: 100%;
 }
 
+div {
+    font-family: 'Muli', sans-serif;
+    color: white;
+}
+
 /* footer {
     height: 50px;
     left: 0px;
@@ -56,8 +61,13 @@ h3 {
     font-size: 50px;
 }
 
+h4 {
+    font-size: 30px;
+}
+
 img {
     max-height: 200px;
+    border-radius: 5%;
 }
 
 button {
@@ -181,4 +191,14 @@ form {
     align-items: center;
     justify-content: center;
     color: white;
+}
+
+#matches-container {
+    display: flex;
+    flex-direction: row;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
+    /* align-items: center; */
 }

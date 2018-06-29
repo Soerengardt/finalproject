@@ -62,6 +62,16 @@ module.exports.createProfile = function createProfile(userId, birthday, gender, 
     );
 };
 
+module.exports.uploadPhoto = function uploadPhoto(id, image_url) {
+    return db.query(
+        `UPDATE users
+        SET image_url = $2
+        WHERE id = $1
+        RETURNING image_url
+        `,
+        [id || null, image_url]
+    );
+};
 
 
 ///////////////////// PROFILE /////////////////////////
@@ -108,6 +118,19 @@ module.exports.getAnswersByUserId = function getAnswersByUserId(userId) {
         [userId]
     );
 };
+
+module.exports.getUsersByIds = function getUsersByIds(arrOfIds) {
+    // console.log("running getUsersByIds", arrOfIds);
+    return db.query(
+        `
+        SELECT id, first, last, image_url
+        FROM users
+        WHERE id = any($1)
+        `,
+        [arrOfIds]
+    );
+};
+
 
 ////////////////////// MATCHING /////////////////////////
 ////////////////////// PASSWORD /////////////////////////

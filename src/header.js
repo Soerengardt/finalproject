@@ -11,7 +11,7 @@ export function ProfilePic(props) {
     return (
         <div>
             <h3>Here you can upload an image of yourself!</h3>
-            <img src={props.imageUrl} onClick={props.toggleToUploader} />
+            <button onClick={props.toggleToUploader}>Upload</button>
         </div>
     );
 }
@@ -40,13 +40,13 @@ export function ChatNav() {
 //     );
 // }
 
-// export function Home() {
-//     return (
-//         <a className="button" href="/">
-//             My profile
-//         </a>
-//     );
-// }
+export function HomeNav() {
+    return (
+        <a className="button" href="/home">
+            Home
+        </a>
+    );
+}
 
 export function Logout() {
     return (
